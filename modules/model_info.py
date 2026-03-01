@@ -22,6 +22,18 @@ MODEL_CONFIGS = {
         "tokenizer_version": "12hz",
         "description": "Create voices from natural language descriptions",
     },
+    "Qwen3-TTS-12Hz-0.6B-Base": {
+        "repo_id": "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
+        "model_type": "base",
+        "tokenizer_version": "12hz",
+        "description": "Lightweight base model (0.6B) for voice cloning — lower VRAM",
+    },
+    "Qwen3-TTS-12Hz-0.6B-CustomVoice": {
+        "repo_id": "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+        "model_type": "custom_voice",
+        "tokenizer_version": "12hz",
+        "description": "Lightweight custom voice model (0.6B) with predefined speakers — lower VRAM",
+    },
 }
 
 # Tokenizer configurations
