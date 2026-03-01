@@ -7,7 +7,7 @@ import logging
 
 from comfy.utils import ProgressBar
 
-from ..modules.model_info import SPEAKERS, LANGUAGES
+from ..modules.model_info import LANGUAGES
 from ..modules.audio_utils import numpy_to_comfyui_audio, empty_audio
 
 logger = logging.getLogger("FL_Qwen3TTS")
@@ -37,7 +37,7 @@ class FL_Qwen3TTS_CustomVoice:
             "required": {
                 "model": ("QWEN3TTS_MODEL",),
                 "text": ("STRING", {"multiline": True, "default": "Hello, this is a test of the Qwen3 text to speech system."}),
-                "speaker": (SPEAKERS, {"default": "Ryan"}),
+                "speaker": ("STRING", {"default": "Ryan"}),
                 "language": (LANGUAGES, {"default": "English"}),
                 "top_k": ("INT", {"default": 50, "min": 1, "max": 200}),
                 "top_p": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 1.0, "step": 0.05}),

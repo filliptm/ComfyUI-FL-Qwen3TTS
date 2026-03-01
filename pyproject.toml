@@ -1,7 +1,7 @@
 [project]
 name = "ComfyUI-FL-Qwen3TTS"
 description = "Qwen3 TTS for ComfyUI - High-quality text-to-speech with voice cloning, voice design, and custom voices"
-version = "1.0.0"
+version = "1.0.1"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.9"
 dependencies = [
