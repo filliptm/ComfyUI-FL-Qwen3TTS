@@ -13,8 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import sox
-import copy
 import torch
 import operator
 import onnxruntime
@@ -38,6 +36,12 @@ def dynamic_range_compression_torch(x, C=1, clip_val=1e-5):
 def spectral_normalize_torch(magnitudes):
     output = dynamic_range_compression_torch(magnitudes)
     return output
+
+def peak_normalize(audio, db_level=-6):
+    waveform = torch.as_tensor(audio).clone()
+    target_peak = 10 ** (db_level / 20)
+    peak = waveform.abs().max().clamp_min(torch.finfo(waveform.dtype).tiny)
+    return waveform.mul_(target_peak / peak)
 
 class MelSpectrogramFeatures(nn.Module):
     """
@@ -124,8 +128,6 @@ class XVectorExtractor(nn.Module):
         providers = ["CPUExecutionProvider"]
         self.ort_session = onnxruntime.InferenceSession(audio_codec_with_xvector, sess_options=option, providers=providers)
 
-        self.tfm = sox.Transformer()
-        self.tfm.norm(db_level=-6)
 
         self.mel_ext = MelSpectrogramFeatures(
             filter_length=1024,
@@ -139,9 +141,7 @@ class XVectorExtractor(nn.Module):
 
     def extract_code(self, audio):
         with torch.no_grad():
-            norm_audio = self.sox_norm(audio)
-
-            norm_audio = torch.from_numpy(copy.deepcopy(norm_audio)).unsqueeze(0)
+            norm_audio = peak_normalize(audio).unsqueeze(0)
             feat = kaldi.fbank(norm_audio,
                             num_mel_bins=80,
                             dither=0,
@@ -154,9 +154,6 @@ class XVectorExtractor(nn.Module):
         
         return norm_embedding.numpy(), ref_mel.permute(0,2,1).squeeze(0).numpy()
     
-    def sox_norm(self, audio):
-        wav_norm = self.tfm.build_array(input_array=audio, sample_rate_in=16000)
-        return wav_norm
 
 
 class WhisperEncoderVQ(WhisperEncoder):

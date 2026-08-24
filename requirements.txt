@@ -1,9 +1,11 @@
 torch>=2.0.0
 torchaudio>=2.0.0
+numpy
 transformers>=4.57.0
 accelerate>=1.0.0
 huggingface_hub
 librosa
 soundfile
+onnxruntime
 einops
 safetensors
