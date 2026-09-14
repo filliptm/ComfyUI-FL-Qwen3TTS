@@ -154,14 +154,6 @@ try:
 
     logger.info("FL Qwen3TTS nodes loaded successfully!")
 
-    # ASCII art banner
-    ascii_art = """
- ⣏⡉ ⡇    ⡎⢱ ⡇⢸ ⣏⡉ ⡷⣸   ⢹⠁ ⢹⠁ ⢎⡑
- ⠇  ⠧⠤   ⠣⠪ ⠟⠻ ⠧⠤ ⠇⠹   ⠸  ⠸  ⠢⠜
-"""
-    print(f"\033[35m{ascii_art}\033[0m")
-    print("FL Qwen3 TTS Custom Nodes Loaded - Version 1.0.0")
-
 except Exception as e:
     logger.error(f"Failed to load FL Qwen3TTS nodes: {e}")
     import traceback
@@ -170,5 +162,17 @@ except Exception as e:
     # Provide empty mappings on failure
     NODE_CLASS_MAPPINGS = {}
     NODE_DISPLAY_NAME_MAPPINGS = {}
+
+# Print banner (separate from node registration so encoding errors don't break loading)
+if NODE_CLASS_MAPPINGS:
+    try:
+        ascii_art = """
+ ⣏⡉ ⡇    ⡎⢱ ⡇⢸ ⣏⡉ ⡷⣸   ⢹⠁ ⢹⠁ ⢎⡑
+ ⠇  ⠧⠤   ⠣⠪ ⠟⠻ ⠧⠤ ⠇⠹   ⠸  ⠸  ⠢⠜
+"""
+        print(f"\033[35m{ascii_art}\033[0m")
+    except (UnicodeEncodeError, OSError):
+        pass
+    print("FL Qwen3 TTS Custom Nodes Loaded - Version 1.0.5")
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
